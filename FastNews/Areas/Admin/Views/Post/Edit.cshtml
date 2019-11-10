@@ -1,0 +1,108 @@
+﻿@model Models.EF.Post
+
+@{
+    ViewBag.Title = "Update";
+    Layout = "~/Areas/Admin/Views/Shared/_Layouts.cshtml";
+}
+
+@section header {
+    Cập nhật bài viết
+}
+
+@section jsFooter{
+    <script>
+        $('#btnSelectImage').on('click', function (e) {
+            e.preventDefault();
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (url) {
+                $('#txtImage').val(url);
+            };
+            finder.popup();
+        })
+
+        var editor = CKEDITOR.replace('txtContentDetail', {
+            customConfig: '/assets/admin/js/plugins/ckeditor/ckeditor.js',
+            filebrowserBrowseUrl: '/assets/admin/js/plugins/ckfinder/ckfinder.html',
+            filebrowserImageBrowseUrl: '/assets/admin/js/plugins/ckfinder/ckfinder.html?Type=Images',
+            filebrowserFlashBrowseUrl: '/assets/admin/js/plugins/ckfinder/ckfinder.html?Type=Flash',
+            filebrowserUploadUrl: '/assets/admin/js/plugins/ckfinder/core/connector/aspx/connector.aspx?command=QuickUpload&type=Files',
+            filebrowserImageUploadUrl: '/assets/admin/js/plugins/ckfinder/core/connector/aspx/connector.aspx?command=QuickUpload&type=Images',
+            filebrowserFlashUploadUrl: '/assets/admin/js/plugins/ckfinder/core/connector/aspx/connector.aspx?command=QuickUpload&type=Flash'
+        });
+
+    </script>
+}
+
+<div class="panel-body">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Thông tin chi tiết bài viết</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            @using (Html.BeginForm("Edit", "Post", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                @Html.HiddenFor(Model => Model.PostID)
+
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @Html.HiddenFor(model => model.PostID)
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Decription, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Decription, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Decription, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextBoxFor(model => model.Image, new { htmlAttributes = new { @class = "form-control", @id = "txtImage" }, id = "txtImage" })
+                                        <a id="btnSelectImage" href="#">Chọn ảnh</a>
+                                        @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ContentDetail, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextAreaFor(model => model.ContentDetail, new { htmlAttributes = new { @class = "form-control" }, id = "txtContentDetail" })
+                                        @Html.ValidationMessageFor(model => model.ContentDetail, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CategoryID, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.DropDownListFor(model => model.CategoryID, null, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="submit" value="Cập nhật" class="btn btn-primary" />
+                                        <a href="/Admin/Post/Index" class="btn btn-secondary btn-icon-split" style="margin: auto 1rem">
+                                            <span class="text">Thoát</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

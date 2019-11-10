@@ -1,0 +1,98 @@
+﻿@model Models.EF.Category
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layouts.cshtml";
+}
+
+@section header {
+    Cập nhật thể loại
+}
+
+<div class="panel-body">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Thông tin chi thể loại</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            @using (Html.BeginForm("Edit", "Category", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                @Html.HiddenFor(Model => Model.CategoryID)
+
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @Html.HiddenFor(model => model.CategoryID)
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.DisplayOrder, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.DisplayOrder, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Target, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-10">
+                                        @Html.DropDownListFor(model => model.Target, new List<SelectListItem>()
+                                                                                         {
+                                                                                             new SelectListItem() { Selected = true, Text = "Mở trong tab hiện tại", Value = "_self"},
+                                                                                             new SelectListItem() { Selected = false, Text = "Mỏ sang tab mới", Value = "_blank" }
+                                                                                         }, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Target, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ShowOnHome, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-10">
+                                        @Html.DropDownListFor(model => model.ShowOnHome, new List<SelectListItem>()
+                                                                                             {
+                                                                                                 new SelectListItem() { Selected = true, Text = "Có", Value = "true"},
+                                                                                                 new SelectListItem() { Selected = false, Text = "Không", Value = "false" }
+                                                                                             }, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.ShowOnHome, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ShowOnMenu, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-10">
+                                        @Html.DropDownListFor(model => model.ShowOnMenu, new List<SelectListItem>()
+                                                                                         {
+                                                                                             new SelectListItem() { Selected = true, Text = "Có", Value = "true"},
+                                                                                             new SelectListItem() { Selected = false, Text = "Không", Value = "false" }
+                                                                                         }, new { htmlAttributes = new { @class = "form-control" } })
+
+                                        @Html.ValidationMessageFor(model => model.ShowOnMenu, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="submit" value="Cập nhật" class="btn btn-primary" />
+                                        <a href="/Admin/Category/Index" class="btn btn-secondary btn-icon-split" style="margin: auto 1rem">
+                                            <span class="text">Thoát</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

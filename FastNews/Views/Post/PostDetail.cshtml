@@ -1,0 +1,181 @@
+﻿@using System.Web.UI.WebControls
+@using FastNews.Common
+@model Models.EF.Post
+@{
+    ViewBag.Title = "Bài viết";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var similarPost = (List<Models.EF.Post>)ViewBag.SimilarPost;
+    var prevPost = (Models.EF.Post)ViewBag.PreviousPost;
+    var nextPost = (Models.EF.Post)ViewBag.NextPost;
+
+    var comment = (List<Models.ViewModel.CommentViewModel>)ViewBag.Comment;
+}
+@section OptionPostDetail
+{
+    <div class="post_pagination">
+        @if (prevPost != null)
+        {
+            <div class="prev">
+                <a class="angle_left" href="/the-loai/@prevPost.ContentDetail/tin-chi-tiet/@prevPost.MetaTitle-@prevPost.PostID/"><i class="fa fa-angle-double-left" style="font-family: FontAwesome !important;"></i></a>
+                <div class="pagincontent"> <span>Bài viết trước</span> <a href="/the-loai/@prevPost.ContentDetail/tin-chi-tiet/@prevPost.MetaTitle-@prevPost.PostID/">@prevPost.Title</a> </div>
+            </div>
+        }
+        else
+        {
+            <div class="prev">
+                <a class="angle_left" style="background-color: #CACACA"><i class="fa fa-angle-double-left" style="font-family: FontAwesome !important;"></i></a>
+                <div class="pagincontent"> <span>Bài viết trước</span> <a>Không có bài viết nào</a> </div>
+            </div>
+        }
+        @if (nextPost != null)
+        {
+            <div class="next">
+                <div class="pagincontent"> <span>Bài viết sau</span> <a href="/the-loai/@nextPost.ContentDetail/tin-chi-tiet/@nextPost.MetaTitle-@nextPost.PostID/">@nextPost.Title</a> </div>
+                <a class="angle_right" href="/the-loai/@nextPost.ContentDetail/tin-chi-tiet/@nextPost.MetaTitle-@nextPost.PostID/"><i class="fa fa-angle-double-right" style="font-family: FontAwesome !important;"></i></a>
+            </div>
+        }
+        else
+        {
+            <div class="next">
+                <div class="pagincontent"> <span>Bài viết sau</span> <a>Không có bài viết nào</a> </div>
+                <a class="angle_right" style="background-color: #CACACA"><i class="fa fa-angle-double-right" style="font-family: FontAwesome !important;"></i></a>
+            </div>
+        }
+    </div>
+    <div class="similar_post">
+        <h2>Bài viết cùng thể loại <i class="fa fa-thumbs-o-up" style="font-family: FontAwesome !important;"></i></h2>
+        <ul class="small_catg similar_nav wow fadeInDown animated">
+            @if (similarPost.Count > 0)
+            {
+                foreach (var post in similarPost)
+                {
+                    <li>
+                        <div class="media wow fadeInDown animated" style="visibility: visible; animation-name: fadeInDown;">
+                            <a class="media-left related-img" href="/the-loai/@post.ContentDetail/tin-chi-tiet/@post.MetaTitle-@post.PostID/"><img src="@post.Image" alt="@post.MetaTitle"></a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><a href="/the-loai/@post.ContentDetail/tin-chi-tiet/@post.MetaTitle-@post.PostID/" style="font-size: 16px">@post.Title </a></h4>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+            else
+            {
+                <blockquote>Hiện không có bài viết liên quan nào...</blockquote>
+            }
+        </ul>
+    </div>
+}
+@section OptionRecentPosts
+{
+    <div class="col-lg-4 col-md-4">
+        <div class="content_bottom_right">
+            <div class="single_bottom_rightbar">
+                <h2>Các bài viết gần đây</h2>
+                @{ Html.RenderAction("RecentPost", "Home"); }
+            </div>
+        </div>
+    </div>
+}
+<div class="single_page_area text-justify">
+    <blockquote class="post_titile" style="font-weight: bold; font-size: 26px;">@Model.Title</blockquote>
+    <div class="single_page_content"style="font-size: 16px;">
+        <div class="post_commentbox"><span><i class="fa fa-calendar"></i>@Model.DatetimeCreate</span></div>
+        <img class="img-center" src="../images/550x330x3.jpg" alt="">
+        @Html.Raw(@Model.ContentDetail)
+    </div>
+</div>
+<!-- Comment -->
+<div class="row bootstrap snippets" style="clear: both">
+    <div class="col-md-12 col-sm-12">
+        <div class="comment-wrapper">
+            <div class="panel" style="border-color: #ffa500">
+                <div class="panel-heading" style="background-color: #ffa500; border-bottom: #ffa500">
+                    <span style="color: white; font-size: 15px; text-transform: uppercase;font-weight: bold">Bình luận bài viết</span>
+                </div>
+                <div class="panel-body">
+                    @{
+                        var session = (UserLogin)Session[Commonstants.USER_SESSION];
+                    }
+                    @using (Html.BeginForm("InsertComment", "Post", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        if (@ViewBag.ErrorComment != null)
+                        {
+                            <div class="alert alert-danger" style="margin-top: 10px">
+                                @ViewBag.ErrorComment
+                            </div>
+                            <br />
+                        }
+
+                        @Html.TextArea("commentDetail", new { @class = "form-control textbox_dmc", placeholder = "Để lại bình luận của bạn tại đây...", rows = 5, style = "color: #777777b0" })
+                        @Html.TextArea("postID", new { style = "display: none" })
+                        @Html.TextArea("url", HttpContext.Current.Request.Url.ToString(), new { style = "display: none" })
+
+                        <br />
+                        if (session == null)
+                        {
+                            <a href="#" data-toggle="modal" data-target="#loginRequire" class="btn btn_dmc pull-right" style="padding: 8px 12px;">
+                                <span>Đăng bình luận</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <input type="submit" value="Đăng bình luận" class="btn btn_dmc pull-right" style="padding: 8px 12px">
+                        }
+                    }
+                    <div class="clearfix"></div>
+                    <hr>
+                    <ul class="media-list">
+                        @if (comment.Count == 0)
+                        {
+                            <li>Chưa có bình luận nào...</li>
+                        }
+                        else
+                        {
+                            foreach (var commentItem in comment)
+                            {
+                                <li class="media" style="min-height: 80px">
+                                    <a href="#" class="pull-left">
+                                        <img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle">
+                                    </a>
+                                    <div class="">
+                                        <span class="text-muted pull-right">
+                                            <small class="text-muted" style="font-style: italic;"> @commentItem.DateTimeCreate</small>
+                                        </span>
+                                        <strong style="color: #ffa500"> @commentItem.Username</strong>
+                                        <p>
+                                            @commentItem.ContentDetail
+                                        </p>
+                                    </div>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Login Require Modal-->
+<div class="modal fade" id="loginRequire" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom: 0;">
+                <h3 class="modal-title text-center text-uppercase" style="color: #ffa500; font-weight: bold;" id="exampleModalLabel">Thông báo</h3>
+            </div>
+            <hr />
+            <div class="modal-body text-center" style="font-size: 18px">
+                <span>Bạn phải <b>ĐĂNG NHẬP</b> mới có thể tiến hành bình luận</span>
+            
+                <div style="display: flex; justify-content: space-around; padding: 20px">
+                    <input type="button" value="Thoát" class="text-uppercase btn_dmc" style="padding: 10px" data-dismiss="modal">
+                    @Html.ActionLink("Đăng nhập", "Login", "Account", null, new { @class = "text-uppercase btn_dmc", style ="padding: 10px;" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

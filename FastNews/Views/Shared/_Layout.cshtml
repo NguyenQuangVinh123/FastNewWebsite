@@ -1,0 +1,322 @@
+﻿@using FastNews.Common
+@using Models.EF
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FastNews</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/assets/client/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/assets/client/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/assets/client/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="/assets/client/css/slick.css">
+    <link rel="stylesheet" type="text/css" href="/assets/client/css/theme.css">
+    <link rel="stylesheet" type="text/css" href="/assets/client/css/style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="/DataImages/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/DataImages/images/favicon/favicon-16x16.png">
+    <!--[if lt IE 9]>
+    <script src="/assets/client/js/html5shiv.min.js"></script>
+    <script src="/assets/client/js/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .modal-body .form-control {
+            margin: 10px 0;
+        }
+
+        ul.top_nav.logout li {
+            float: right;
+            height: 40px;
+            line-height: 40px;
+        }
+        ul.top_nav.login li {
+            float: right;
+            height: 20px;
+            line-height: 20px;
+        }
+
+        .btn_dmc {
+            background: none;
+            color: #ffa500;
+            border: 1px solid #ffa500 !important;
+            padding: 12px 40px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            font-size: 14px;
+            transition: 0.4s linear;
+        }
+
+            .btn_dmc:hover {
+                background: #ffa500;
+                color: #fff;
+            }
+
+        .modal-header {
+            padding: 10px;
+        }
+
+        .modal-content hr {
+            margin-top: 0;
+            margin-bottom: 0;
+            border: 0;
+            border-top: 3px solid #ffa500;
+            width: 15%;
+        }
+
+        .modal-body {
+            width: 70%;
+            margin: 0 auto;
+        }
+
+        .textbox_dmc {
+            background: none;
+            border: none;
+            outline: none;
+            border-bottom: 1px solid #ffa500;
+            padding: 10px 6px;
+            font-size: 14px;
+        }
+
+        .header_top_left {
+            margin-top: 7px;
+        }
+
+        /* Commnent */
+        .comment-wrapper .panel-body {
+            max-height: 650px;
+            overflow: auto;
+        }
+
+        .comment-wrapper .media-list .media img {
+            width: 64px;
+            height: 64px;
+            border: 2px solid #e5e7e8;
+        }
+
+        .comment-wrapper .media-list .media {
+            border-bottom: 1px dashed #efefef;
+            margin-bottom: 25px;
+        }
+
+        /*ADMIN*/
+        .admin_btn_dmc {
+            color: white;
+            font-weight: bold;
+            background-color: #ffa500;
+            height: 38px;
+            line-height: 38px;
+            padding: 8px;
+            margin: 15px;
+        }
+
+            .admin_btn_dmc:hover {
+                border: 2px solid #ffa500;
+                color: #ffa500;
+                background-color: white;
+            }
+        /*Search*/
+        .textbox_search_dmc {
+            height: 36px !important;
+            line-height: 36px !important;
+        }
+
+        .button_search_dmc {
+            background-color: #ffa500;
+            border: 2px solid #ffa500;
+            color: white;
+            padding: 4px 7px;
+            margin-left: -5px;
+        }
+
+            .button_search_dmc:hover {
+                background-color: white;
+                color: #ffa500;
+            }
+        /*All page*/
+        * {
+            font-family: Arial, sans-serif !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="preloader">
+        <div id="status">&nbsp;</div>
+    </div>
+    <a class="scrollToTop" href="#"><i class="fa fa-angle-up" style="font-family: FontAwesome !important;"></i></a>
+    <div class="container">
+        <header id="header">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="header_top">
+                        <div class="header_top_left">
+                            @{
+                                var session = (UserLogin)Session[Commonstants.USER_SESSION];
+                            }
+                            <div class="top_nav" style="margin-bottom: 10px;">
+                                <form action="/tim-kiem" method="get" class="search_form" style="float: left;margin-bottom: 10px;">
+                                    <input type="text" name="keyword" id="txtKeyword" placeholder="Tìm kiếm..." class="textbox_search_dmc" style="font-size: 16px;border-bottom: 1px solid #ffa500;">
+                                    <button type="submit" class="button_search_dmc">
+                                        <i class="fa fa-search" style="font-family: FontAwesome !important; font-size: 1.5em;"></i>
+                                    </button>
+                                </form>
+                                <div>
+                                    @if (session != null && session.RoleID == 1)
+                                    {
+                                        <a href="/Admin/Home" class="admin_btn_dmc">
+                                            <span style="text-transform: uppercase; font-size: 14px; margin: 5px 10px"> Web ADMIN </span>
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="header_top_right">
+                            @if (session != null)
+                            {
+                                <span style="float: right;padding: 0 12px;">Xin chào, <span style="text-transform: uppercase; font-weight: bold">@session.UserName</span></span>
+                                <br />
+                                <ul class="top_nav login" style="float: right">
+                                    <li>
+                                        <a href="/doi-mat-khau">
+                                            <span style="text-transform: uppercase; font-size: 14px;"> Đổi mật khẩu </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" data-toggle="modal" data-target="#logoutModal">
+                                            <span style="text-transform: uppercase; font-size: 14px;"> Đăng xuất </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            }
+                            else
+                            {
+                                <ul class="top_nav logout" style="float: right">
+                                    <li><a href="/dang-nhap">Đăng nhập</a></li>
+                                    <li><a href="/dang-ky">Đăng ký</a></li>
+                                </ul>
+                            }
+                        </div>
+                    </div>
+                    <div class="header_bottom">
+                        <div class="header_bottom_left"><a class="logo" href="/">fast<strong>News</strong> <span style="font-family: TArial, Helvetica, sans-serif">Tin tức Online mỗi ngày</span></a></div>
+                        <div class="header_bottom_right">
+                            <a><img src="/DataImages/images/UPS-Banner-Ad-728x90-NC-CA-En.jpg" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div id="navarea">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        @{ Html.RenderAction("MainMenu", "Home"); }
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <section id="mainContent">
+            @RenderSection("SliderArea", false)
+            @* Kiểm tra nếu có Section đó thì hiển thị chia ra 2 cột(Mỗi bên 6), không có thì hiển thị nguyên 1 cột (12)*@
+            @if (IsSectionDefined("OptionRecentPosts"))
+            {
+                <div class="content_bottom">
+                    <div class="col-lg-8 col-md-8">
+                        <div class="content_bottom_left">
+                            @RenderBody()
+                        </div>
+                        @RenderSection("OptionPostDetail", false)
+                    </div>
+                    @RenderSection("OptionRecentPosts", false)
+                </div>
+            }
+            else
+            {
+                <div class="content_bottom">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="content_bottom_left">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+    <footer id="footer">
+        <div class="footer_top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="single_footer_top wow fadeInLeft">
+                            <h2>Thông tin tòa soạn</h2>
+                            <p><strong>Báo Tin tức điện tử FastNews</strong></p>
+                            <p><strong>Địa chỉ:</strong> 371 Nguyễn Kiệm , Gò Vấp, Tp.HCM</p>
+                            <p><strong>Điện thoại:</strong> 0367.219.058</p>
+                            <p><strong>Email:</strong> 1451010020Cuong@ou.edu.vn</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="single_footer_top wow fadeInDown">
+                            <h2>Thông tin đề tài</h2>
+                            <p><strong>Bài tập lớn môn Quản Trị Mạng</strong></p>
+                            <p><strong>Đề tài:</strong> Viết website tin tức</p>
+                            <p><strong>Công nghệ sử dụng:</strong> ASP.NET MVC</p>
+                            <p><strong>Nhóm thực hiện:</strong> Nhóm 5</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="single_footer_top wow fadeInRight">
+                            <h2>Thông tin thành viên</h2>
+                            <p><strong>1.</strong> Đặng Minh Cường</p>
+                            <p><strong>2.</strong> Lê Ngọc Tú</p>
+                            <p><strong>3.</strong> Trần Hữu Nghĩa</p>
+                            <p><strong>4.</strong> Đoàn Thị Hồng Lên</p>
+                            <p><strong>5.</strong> Nguyễn Quang Vinh</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer_bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="footer_bottom_left">
+                            <p>© Toàn bộ bản quyền thuộc về Nhóm 5</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: 0;">
+                    <h3 class="modal-title text-center text-uppercase" style="color: #ffa500; font-weight: bold;" id="exampleModalLabel">Xác nhận</h3>
+                </div>
+                <hr />
+                <div class="modal-body text-center" style="font-size: 18px">
+                    <span>Bạn có chắc là bạn muốn <b>THOÁT</b> ứng dụng?</span>
+
+                    <div style="display: flex; justify-content: space-around; padding: 20px">
+                        <input type="button" value="Thoát" class="text-uppercase btn_dmc" style="padding: 10px" data-dismiss="modal">
+                        @Html.ActionLink("Đồng ý", "Logout", "Account", null, new { @class = "text-uppercase btn_dmc", style = "padding: 10px;" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/client/js/jquery.min.js"></script>
+    <script src="/assets/client/js/bootstrap.min.js"></script>
+    <script src="/assets/client/js/wow.min.js"></script>
+    <script src="/assets/client/js/slick.min.js"></script>
+    <script src="/assets/client/js/custom.js"></script>
+</body>
+</html>

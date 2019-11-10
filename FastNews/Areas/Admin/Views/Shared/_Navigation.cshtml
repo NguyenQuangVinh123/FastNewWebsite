@@ -1,0 +1,73 @@
+﻿<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/Admin/Home">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3"> fastNews </div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    @*<li class="nav-item" style="text-align: center;">
+        <a class="nav-link" href="/Admin/Login/Index">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span style="text-transform: uppercase; font-weight: bold; color: white"> Đăng xuất </span>
+        </a>
+    </li>*@
+
+    <!-- Divider -->
+    @*<hr class="sidebar-divider">*@
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Thông tin:
+    </div>
+
+    <!-- Nav Item - Users Collapse Menu -->
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Quản lý hệ thống</span>
+        </a>
+        <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                @*<h6 class="collapse-header">Quản lý tài khoản</h6>*@
+                <a class="collapse-item" href="/Admin/Role/Index">Quản lý quyền</a>
+                <a class="collapse-item" href="/Admin/Account/Index">Quản lý tài khoản</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Table -->
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTables" aria-expanded="true" aria-controls="collapseTables">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Quản lý thông tin</span>
+        </a>
+        <div id="collapseTables" class="collapse" aria-labelledby="headingTables" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+
+                <a class="collapse-item" href="/Admin/Category/Index">Quản lý thể loại</a>
+                <a class="collapse-item" href="/Admin/Post/Index">Quản lý  bài viết</a>
+
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>
+<!-- End of Sidebar -->

@@ -1,0 +1,88 @@
+﻿@model PagedList.IPagedList<Models.EF.Role>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layouts.cshtml";
+}
+@section header {
+    Danh sách quyền
+}
+<div class="panel-body">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Danh sách quyền</h6>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("Index", "Role", FormMethod.Get))
+                    {
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                                    <div class="input-group float-left" style="width: 25rem;">
+                                        <input type="text" value="@ViewBag.SearchString" name="searchString" class="form-control bg-light border-0 small" placeholder="Nhập tên tên quyền..." aria-label="Search" aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="submit">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <a href="/Admin/Role/Create" class="btn btn-primary btn-icon-split float-right">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span class="text">Thêm mới</span>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                    <br />
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>RoleID</th>
+                                    <th>Name</th>
+                                    <th>IsDisable</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="row_@item.RoleID">
+                                        <td>
+                                            <a href="/Admin/Role/Edit/@item.RoleID">Sửa</a>
+                                            |
+                                            @Ajax.ActionLink("Xóa", "Delete", new { @id = item.RoleID }, new AjaxOptions
+                                       {
+                                           Confirm = "Bạn có muốn xóa bản ghi này?",
+                                           OnComplete = "$('#row_" + @item.RoleID + "').remove()",
+                                           HttpMethod = "Delete"
+                                       })
+                                        </td>
+                                        <td>@item.RoleID</td>
+                                        <td>@item.RoleName</td>
+                                        <td>@item.IsDisable</td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                        Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+
+                        <div class="col-md-11 text-center clear">
+                            @Html.PagedListPager(Model, Page => Url.Action("Index", new
+                       {
+                           Page,
+                           @searchString = @ViewBag.SearchString
+                       }))
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,105 @@
+﻿@{
+
+    ViewBag.Title = "Trang chủ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var test = (List<Models.ViewModel.PostViewModel>)ViewBag.PostTest;
+    var leftSlide = (List<Models.EF.Post>)ViewBag.LeftSlide;
+    var rightSlide = (List<Models.EF.Post>)ViewBag.RightSlide;
+}
+@section SliderArea
+{
+    <div class="content_top">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm6">
+                <div class="latest_slider">
+                    <div class="slick_slider">
+                        @foreach (var leftItem in leftSlide)
+                        {
+                            if (leftItem != null)
+                            {
+                                <div class="single_iteam">
+                                    <a class="slider_tittle" href="/the-loai/@leftItem.ContentDetail/tin-chi-tiet/@leftItem.MetaTitle-@leftItem.PostID">
+                                        <img src="@leftItem.Image" alt="">
+                                        <h2>
+                                            @leftItem.Title
+                                        </h2>
+                                    </a>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm6">
+                <div class="content_top_right">
+                    <ul class="featured_nav wow fadeInDown">
+                        @foreach (var rightItem in rightSlide)
+                        {
+                            if (rightItem != null)
+                            {
+                                <li>
+                                    <img src="@rightItem.Image" alt="">
+                                    <div class="title_caption"><a href="/the-loai/@rightItem.ContentDetail/tin-chi-tiet/@rightItem.MetaTitle-@rightItem.PostID">@rightItem.Title</a></div>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section OptionRecentPosts
+{
+    <div class="col-lg-4 col-md-4">
+        <div class="content_bottom_right">
+            <div class="single_bottom_rightbar">
+                <h2>Các bài viết gần đây</h2>
+                @{ Html.RenderAction("RecentPost", "Home"); }
+            </div>
+        </div>
+    </div>
+}
+@foreach (var category in test)
+{
+    <div class="single_category wow fadeInDown">
+        <h2> <span class="bold_line"><span></span></span> <span class="solid_line"></span> <a class="title_text">@category.CategoryName</a> </h2>
+        @if (@category.ListPosts.Count == 0)
+        {
+            <div class="media-body">
+                <blockquote>Hiện tại chưa có bài viết nào cho mục này...</blockquote>
+            </div>
+        }
+        else
+        {
+            <ul class="small_catg popular_catg wow fadeInDown" style="padding-top: 20px;">
+                @foreach (var post in category.ListPosts)
+                {
+                    <li>
+                        <div class="media wow fadeInDown">
+                            <a href="the-loai/@category.CategoryMetaTitle/tin-chi-tiet/@post.MetaTitle-@post.PostID" class="media-left"><img alt="@post.MetaTitle" src="@post.Image"> </a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><a href="the-loai/@category.CategoryMetaTitle/tin-chi-tiet/@post.MetaTitle-@post.PostID">@post.Title</a></h4>
+                                <div class="comments_box"> <span class="meta_date">@post.DatetimeCreate</span> <span class="meta_more"><a href="the-loai/@category.CategoryMetaTitle/tin-chi-tiet/@post.MetaTitle-@post.PostID">Xem thêm...</a></span> </div>
+                                <p>@post.Decription</p>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+}
+@Html.Raw(TempData["msg"])
+
+@if (ViewBag.Message1 != null)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            alert("@ViewBag.Message1");
+
+        }
+
+    </script>
+}
