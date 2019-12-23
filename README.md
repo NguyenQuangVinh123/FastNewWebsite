@@ -1,4 +1,4 @@
 # FastNewWebsite
 
-App dùng php + sql server ( code thuần )
+Website dùng asp.net MVC + php + sql server ( code thuần )
 Trang tin tức
